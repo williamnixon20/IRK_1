@@ -1,10 +1,10 @@
-const sqlite3 = require("sqlite3").verbose();
+const Database = require("better-sqlite3");
 
 // Connect to SQLite database
-const db = new sqlite3.Database("history.db");
+const db = new Database("history.db");
 
 // Create 'history' table if it doesn't exist
-db.run(`
+const createTableStmt = db.prepare(`
     CREATE TABLE IF NOT EXISTS history (
         timestamp TEXT,
         string TEXT,
@@ -12,31 +12,22 @@ db.run(`
         result TEXT
     )
 `);
+createTableStmt.run();
 
 // Function to save history in the 'history' table
 const saveHistory = (string, operation, result) => {
     const timestamp = new Date().toISOString();
-    db.run(
-        "INSERT INTO history (timestamp, string, operation, result) VALUES (?, ?, ?, ?)",
-        [timestamp, string, operation, result],
-        (err) => {
-            if (err) {
-                console.error("Error saving history:", err.message);
-            } else {
-                console.log("History saved successfully.");
-            }
-        }
+    const stmt = db.prepare(
+        "INSERT INTO history (timestamp, string, operation, result) VALUES (?, ?, ?, ?)"
     );
+    stmt.run(timestamp, string, operation, result);
+    console.log("History saved successfully.");
 };
 
 const getHistory = (callback) => {
-    db.all("SELECT * FROM history ORDER BY timestamp desc", (err, rows) => {
-        if (err) {
-            console.error("Error retrieving history:", err.message);
-        } else {
-            callback(rows);
-        }
-    });
+    const stmt = db.prepare("SELECT * FROM history ORDER BY timestamp DESC");
+    const rows = stmt.all();
+    callback(rows);
 };
 
 module.exports = {

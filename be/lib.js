@@ -1,6 +1,6 @@
+"use strict";
 let compress = (uncompressed) => {
-    // Build the dictionary.
-    var i = 256,
+    let i = 256,
         dictionary = {},
         c,
         wc,
@@ -33,18 +33,23 @@ let compress = (uncompressed) => {
 };
 
 let decompress = (compressed) => {
-    // Build the dictionary.
-    var i = 256,
+    console.log("DECOMPRES DPT " + compressed)
+    let i,
         dictionary = [],
+        w,
+        result,
         k,
         entry = "",
         dictSize = 256;
+    for (i = 0; i < 256; i += 1) {
+        dictionary[i] = String.fromCharCode(i);
+    }
 
-    while (i--) dictionary[i] = String.fromCharCode(i);
-
-    var w = String.fromCharCode(compressed[0]);
-    var result = w;
+    w = String.fromCharCode(compressed[0]);
+    result = w;
     for (i = 1; i < compressed.length; i += 1) {
+        console.log(result)
+        console.log(compressed[i])
         k = compressed[i];
         if (dictionary[k]) {
             entry = dictionary[k];
@@ -64,7 +69,7 @@ let decompress = (compressed) => {
         w = entry;
     }
     return result;
-};
+}
 
 function decimalStringToBinaryString(decimalString) {
     let decimalArray = decimalString.split(" "); // Split the decimal string by space

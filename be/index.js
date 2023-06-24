@@ -54,13 +54,14 @@ app.post("/api/encode", (req, res) => {
 
 app.post("/api/decode", (req, res) => {
     let { string, extra } = req.body;
-    let arr = string.split(" ");
+    let arr = string.trim().split(" ");
 
     if (arr[0].length === 8) {
         arr = binaryStringToDecimalString(string).trim().split(" ");
     }
 
-    let result = decompress(arr);
+
+    let result = decompress(arr.map(Number));
 
     if (extra == "rle") {
         result = decodeRLE(result);
