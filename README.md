@@ -4,8 +4,11 @@ Speedrun IRK Lab selection, a simple encode/decoding app made using LZW algorith
 An option is included to perform run-length encoding first.
 
 BE: Nodejs + Express
+
 FE: Static site (Plain HTML + CSS) 
+
 DB: Sqlite3
+
 Deployed on a DO droplet.
 
 # Oleh
