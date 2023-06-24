@@ -37,6 +37,7 @@ app.get("/api/histories", (req, res) => {
 // POST endpoint
 app.post("/api/encode", (req, res) => {
     let { string, extra } = req.body;
+    let string_raw = string;
     if (extra === "rle") {
         string = encodeRLE(string);
     }
@@ -48,13 +49,14 @@ app.post("/api/encode", (req, res) => {
         result: compressed,
         result_byte: decimalStringToBinaryString(compressed).trim(),
     };
-    saveHistory(string, "encode", JSON.stringify(result));
+    saveHistory(string_raw, "encode", JSON.stringify(result));
     res.json(result);
 });
 
 app.post("/api/decode", (req, res) => {
     let { string, extra } = req.body;
     let arr = string.trim().split(" ");
+    let string_raw = string;
 
     if (arr[0].length === 8) {
         arr = binaryStringToDecimalString(string).trim().split(" ");
@@ -66,7 +68,7 @@ app.post("/api/decode", (req, res) => {
     if (extra == "rle") {
         result = decodeRLE(result);
     }
-    saveHistory(string, "decode", JSON.stringify(result));
+    saveHistory(string_raw, "decode", JSON.stringify(result));
 
     // Process the data or perform any required operations
     // For this example, we'll simply send back a response with the received data

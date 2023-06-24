@@ -33,7 +33,6 @@ let compress = (uncompressed) => {
 };
 
 let decompress = (compressed) => {
-    console.log("DECOMPRES DPT " + compressed)
     let i,
         dictionary = [],
         w,
@@ -48,8 +47,6 @@ let decompress = (compressed) => {
     w = String.fromCharCode(compressed[0]);
     result = w;
     for (i = 1; i < compressed.length; i += 1) {
-        console.log(result)
-        console.log(compressed[i])
         k = compressed[i];
         if (dictionary[k]) {
             entry = dictionary[k];
