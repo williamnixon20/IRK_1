@@ -1,7 +1,12 @@
 # Description
-IRK Lab selection, a simple encode/decoding app made using LZW algorithm. Covers the extended ASCII characters (256). 
+Speedrun IRK Lab selection, a simple encode/decoding app made using LZW algorithm. Covers the extended ASCII characters (256). 
 
 An option is included to perform run-length encoding first.
+
+BE: Nodejs + Express
+FE: Static site (Plain HTML + CSS) 
+DB: Sqlite3
+Deployed on a DO droplet.
 
 # Oleh
 13521123 - William
