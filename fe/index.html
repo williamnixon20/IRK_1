@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Seleksi IRK SPEEDRUN</title>
+    </head>
+    <body>
+        <h1>Seleksi IRK SPEEDRUN</h1>
+        <input type="text" id="inputField" placeholder="Enter text" />
+        <br />
+        <button onclick="encodeData()">Encode</button>
+        <button onclick="decodeData()">Decode</button>
+        <br />
+        <br />
+        <label> <input type="checkbox" id="rleToggle" /> Enable RLE </label>
+        <br />
+        <h2>Encoded:</h2>
+        <div id="encodedResult"></div>
+        <div id="encodedResultBinary"></div>
+        <h2>Decoded:</h2>
+        <div id="decodedResult"></div>
+
+        <script>
+            function encodeData() {
+                const input = document.getElementById("inputField").value;
+                const isRleEnabled =
+                    document.getElementById("rleToggle").checked;
+
+                // Prepare the request body
+                const requestBody = {
+                    string: input,
+                };
+
+                if (isRleEnabled) {
+                    requestBody.extra = "rle";
+                }
+
+                // Make a POST request to /api/encode endpoint
+                fetch("/api/encode", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestBody),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Display the encoded result
+                        document.getElementById("encodedResult").innerText =
+                            "Decimal : " + data.result;
+                        document.getElementById(
+                            "encodedResultBinary"
+                        ).innerText = "Binary : " + data.result_byte;
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
+            }
+
+            function decodeData() {
+                const input = document.getElementById("inputField").value;
+                const isRleEnabled =
+                    document.getElementById("rleToggle").checked;
+
+                // Prepare the request body
+                const requestBody = {
+                    string: input,
+                };
+
+                if (isRleEnabled) {
+                    requestBody.extra = "rle";
+                }
+
+                // Make a POST request to /api/decode endpoint
+                fetch("/api/decode", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestBody),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Display the decoded result
+                        document.getElementById("decodedResult").innerText =
+                            data.result;
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
+            }
+        </script>
+    </body>
+</html>
