@@ -19,6 +19,9 @@
         <h2>Decoded:</h2>
         <div id="decodedResult"></div>
 
+        <h2>History:</h2>
+        <div id="historyContainer"></div>
+
         <script>
             function encodeData() {
                 const input = document.getElementById("inputField").value;
@@ -50,6 +53,7 @@
                         document.getElementById(
                             "encodedResultBinary"
                         ).innerText = "Binary : " + data.result_byte;
+                        fetchHistory();
                     })
                     .catch((error) => {
                         console.error("Error:", error);
@@ -83,11 +87,44 @@
                         // Display the decoded result
                         document.getElementById("decodedResult").innerText =
                             data.result;
+                        fetchHistory();
                     })
                     .catch((error) => {
                         console.error("Error:", error);
                     });
             }
+
+            // Function to fetch and display history
+            function fetchHistory() {
+                fetch("/api/histories")
+                    .then((response) => response.json())
+                    .then((histories) => {
+                        const historyContainer =
+                            document.getElementById("historyContainer");
+
+                        // Clear previous history
+                        historyContainer.innerHTML = "";
+
+                        // Iterate through histories and create HTML elements
+                        histories.forEach((history) => {
+                            const historyItem = document.createElement("div");
+                            historyItem.innerHTML = `
+                                <p>Timestamp: ${history.timestamp}</p>
+                                <p>String: ${history.string}</p>
+                                <p>Operation: ${history.operation}</p>
+                                <p>Result: ${history.result}</p>
+                                <hr>
+                            `;
+                            historyContainer.appendChild(historyItem);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
+            }
+
+            // Fetch and display history on page load
+            fetchHistory();
         </script>
     </body>
 </html>

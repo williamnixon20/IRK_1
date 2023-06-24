@@ -1,7 +1,7 @@
 let express = require("express");
 let cors = require("cors");
 let path = require("path");
-
+let { getHistory, saveHistory } = require("./db.js");
 let {
     encodeRLE,
     decodeRLE,
@@ -28,6 +28,12 @@ app.use(cors());
 // Parse JSON body
 app.use(express.json());
 
+app.get("/api/histories", (req, res) => {
+    getHistory((histories) => {
+        res.json(histories);
+    });
+});
+
 // POST endpoint
 app.post("/api/encode", (req, res) => {
     let { string, extra } = req.body;
@@ -38,10 +44,12 @@ app.post("/api/encode", (req, res) => {
     // Process the data or perform any required operations
     // For this example, we'll simply send back a response with the received data
     let compressed = compress(string).join(" ").trim();
-    res.json({
+    let result = {
         result: compressed,
         result_byte: decimalStringToBinaryString(compressed).trim(),
-    });
+    };
+    saveHistory(string, "encode", JSON.stringify(result));
+    res.json(result);
 });
 
 app.post("/api/decode", (req, res) => {
@@ -57,6 +65,7 @@ app.post("/api/decode", (req, res) => {
     if (extra == "rle") {
         result = decodeRLE(result);
     }
+    saveHistory(string, "decode", JSON.stringify(result));
 
     // Process the data or perform any required operations
     // For this example, we'll simply send back a response with the received data
