@@ -1,11 +1,15 @@
-# IRK_1
-IRK Lab selection
+# Description
+IRK Lab selection, a simple encode/decoding app made using LZW algorithm. Covers the extended ASCII characters (256). 
 
+An option is included to perform run-length encoding first.
+
+# Oleh
 13521123 - William
 
 # How to run
-1. npm install
-2. node index.js
+1. Be on root directory. Cd `be`
+2. Install required dependencies `npm install`
+3. Run BE server `node index.js`
 
-
+# Try it out
 http://192.5.86.232:3000/
